@@ -1,61 +1,57 @@
-<div class="error-page">
-  <h1>{{ settings.schema.title }}</h1>
-  <p>{{ settings.schema.subtext }}</p>
-</div>
-
 {% schema %}
 {
-  "name": "404",
-  "tag" : "section",
+  "name": "Slideshow",
+  "tag": "section",
+  "class": "slideshow",
+  "limit": 1,
   "settings": [
     {
       "type": "text",
       "id": "title",
-      "label": "title",
-      "default": "Not found"
-    },
-    {
-      "type": "text",
-      "id": "subtext",
-      "label": "subtext",
-      "default": "The page you are looking for was not found."
+      "label": "Slideshow"
     }
   ],
+  "max_blocks": 5,
+  "blocks": [
+     {
+       "name": "Slide",
+       "type": "slide",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         }
+       ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "settings": {
+        "title": "Slideshow"
+      },
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Slideshow"
+    },
+    "fr": {
+      "title": "Diaporama"
+    }
+  },
+  "enabled_on": {
+    "templates": ["*"],
+    "groups": ["footer"]
+  }
 }
 {% endschema %}
-
-<style>
-  .error-page {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f9;
-    color: #333;
-    padding: 50px;
-  }
-
-  .error-page h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-  }
-
-  .error-page p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-  }
-
-  .error-page .button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 1em;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .error-page .button:hover {
-    background-color: #0056b3;
-  }
-</style>
