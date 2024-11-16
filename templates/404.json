@@ -9,15 +9,12 @@
  */
 {
   "sections": {
-    "404": {
+    "main": {
       "type": "404",
-      "settings": {
-        "title": "Not found",
-        "subtext": "The page you are looking for was not found."
-      }
+      "settings": {}
     }
   },
   "order": [
-    "404"
+    "main"
   ]
 }
