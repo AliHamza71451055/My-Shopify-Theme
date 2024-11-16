@@ -1,0 +1,17 @@
+{
+    "name": "404",
+    "sections": {
+        "404": {
+            "type": "404",
+            "title": "Page Not Found",
+            "message": "Sorry, the page you are looking for does not exist.",
+            "redirectLink": {
+                "text": "Go to Homepage",
+                "url": "/"
+            }
+        }
+    },
+    "order": [
+        "404"
+    ]
+}
