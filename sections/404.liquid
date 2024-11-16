@@ -1,7 +1,7 @@
 <div class="error-page">
   <h1>{{ section.settings.title }}</h1>
   <p>{{ section.settings.subtext }}</p>
-  <div style="display: flex; justify-content: space evenly; align-items: center;">
+  <div style="display: flex; justify-content: space between; align-items: center;">
     <a href="/" type="button" class="button">{{ section.settings.button }}</a>
     {% for button in section.blocks %}
     <a href="{{ button.settings.url }}" class="button">{{ button.settings.text }}</a>
