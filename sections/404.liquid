@@ -1,8 +1,32 @@
 <div class="error-page">
-    <h1>{{ 'general.404.title' | t }}</h1>
-    <p>{{ 'general.404.subtext_html' | t }}</p>
+    <h1>{{ schema.settings.title }}</h1>
+    <p>{{ schema.settings.subtext }}</p>
     <a class="button" href="{{ root_url }}">Go to Homepage</a>
 </div>
+
+{% schema %}
+  {
+    "name": "404",
+    "class": "404",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Not found"
+      },
+      {
+        "type": "text",
+        "id": "subtext",
+        "label": "Subtext",
+        "default": "The page you are looking for was not found."
+      }
+    ],
+    "presets": [
+    ]
+  }
+{% endschema %}
+
 
 <style>
   .error-page {
