@@ -11,10 +11,7 @@
   "sections": {
     "404": {
       "type": "404",
-      "settings": {
-        "title": "Nahi Mila",
-        "subtext": "Aby Nahi Mila"
-      }
+      "settings": {}
     }
   },
   "order": [
