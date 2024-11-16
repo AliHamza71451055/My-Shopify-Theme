@@ -2,6 +2,9 @@
   <h1>{{ section.settings.title }}</h1>
   <p>{{ section.settings.subtext }}</p>
   <a href="/" type="button" class="button">{{ section.settings.button }}</a>
+  {% for button in section.blocks %}
+    <a href="{{ button.settings.url }}">{{ button.settings.text }}</a>
+  {% endfor %}
 </div>
 
 {% schema %}
@@ -28,6 +31,24 @@
       "default": "Go To HomePage"
     }
   ],
+  "blocks": [
+    {
+      "name" : "button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "url",
+          "id": "url",
+          "label": "url"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
 
