@@ -1,29 +1,28 @@
 <div class="error-page">
-    <h1>{{ settings.schema.title }}</h1>
-    <p>{{ settings.schema.subtext }}</p>
+  <h1>{{ settings.schema.title }}</h1>
+  <p>{{ settings.schema.subtext }}</p>
 </div>
 
 {% schema %}
-  {
-    "name": "404",
-    "tag" : "section",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title",
-        "default": "Not found"
-      },
-      {
-        "type": "text",
-        "id": "subtext",
-        "label": "Subtext",
-        "default": "The page you are looking for was not found."
-      }
-    ],
-  }
+{
+  "name": "404",
+  "tag" : "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "title",
+      "default": "Not found"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "subtext",
+      "default": "The page you are looking for was not found."
+    }
+  ],
+}
 {% endschema %}
-
 
 <style>
   .error-page {
