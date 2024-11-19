@@ -4,7 +4,7 @@
       {% if shop.logo %}
         <img src="{{ shop.logo.src | img_url: 'large' }}" alt="{{ shop.logo.alt | escape }}">
       {% else %}
-        <h1 class="shop-name">{{ section.settings.shop-name }}</h1>
+        <h1 class="shop-name">{{ shop.name }}</h1>
       {% endif %}
     </a>
   </div>
