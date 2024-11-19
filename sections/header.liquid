@@ -10,7 +10,7 @@
   Theme Store optional settings
   - Home page only: only shows on the home page
 {%- endcomment -%}
-<section data-section-id="{{ section.id }}" data-section-type="header">
+<section data-section-id="{{ section.id }}" data-section-type="header" x-data="{ openMobileMenu: false }">
   {%- if section.settings.announcement_bar_enabled -%}
     <div class="announcement-bar">
       {%- if section.settings.announcement_bar_home_page_only == false or template.name == 'index' -%}
@@ -91,55 +91,46 @@
   <nav role="navigation" class="desktop-nav">
     <ul>
       {% for link in linklists[section.settings.menu].links %}
-        {% if link.links != blank %}
-          <li>
-            <a href="{{ link.url }}">
-              {{ link.title }}
-              ▼
-            </a>
-            <ul>
-              {% for childlink in link.links %}
-                <li>
-                  <a href="{{ childlink.url }}">
-                    {{ childlink.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
-        {% else %}
-          <li>
-            <a href="{{ link.url }}">
-              {{ link.title }}
-            </a>
-          </li>
-        {% endif %}
+        <li x-data="{ open: false }">
+          <a href="{{ link.url }}" @click.prevent="open = !open">
+            {{ link.title }}
+            <span x-show="link.links.length > 0">▼</span>
+          </a>
+          <ul x-show="open" @click.away="open = false" x-transition>
+            {% for childlink in link.links %}
+              <li>
+                <a href="{{ childlink.url }}">
+                  {{ childlink.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
       {% endfor %}
     </ul>
   </nav>
 
   <div class="mobile-menu-toggle">
-    <button class="menu-button" onclick="toggleMobileMenu()">Menu</button>
+    <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
   </div>
 
-  <nav class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition >
     <ul>
       {% for link in linklists[section.settings.menu].links %}
-        <li>
-          <a href="{{ link.url }}">
+        <li x-data="{ open: false }">
+          <a href="{{ link.url }}" @click.prevent="open = !open">
             {{ link.title }}
+            <span x-show="link.links.length > 0">▼</span>
           </a>
-          {% if link.links != blank %}
-            <ul>
-              {% for childlink in link.links %}
-                <li>
-                  <a href="{{ childlink.url }}">
-                    {{ childlink.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+          <ul x-show="open" @click.away="open = false" x-transition>
+            {% for childlink in link.links %}
+              <li>
+                <a href="{{ childlink.url }}">
+                  {{ childlink.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
         </li>
       {% endfor %}
     </ul>
@@ -153,141 +144,155 @@
     padding: 10px;
     text-align: center;
   }
-
   .header-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 10px 20px;
   }
-
   .logo-image img {
     max-width: 100%;
     height: auto;
   }
-
   .cart-account {
     display: flex;
     align-items: center;
   }
-
-  .cart-link {
-    margin-right: 20px;
-    text-decoration: none;
-    color: #333;
-  }
-
-  .account-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-  }
-
-  .account-links li {
-    margin-left: 15px;
-  }
-
-  .account-links a {
-    text-decoration: none;
-    color: #333;
-  }
-
   .search-form {
     display: flex;
     align-items: center;
   }
-
-  .search-form input[type="search"] {
+  .search-form input {
     padding: 5px;
     margin-right: 5px;
   }
-
-  .desktop-nav {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .desktop-nav ul {
+  .desktop-nav ul, .mobile-menu ul {
     list-style: none;
     padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
   }
-
-  .desktop-nav li {
+  .desktop-nav li, .mobile-menu li {
     position: relative;
-    margin: 0 15px;
   }
-
-  .desktop-nav a {
+  .desktop-nav a, .mobile-menu a {
     text-decoration: none;
-    color: #333;
     padding: 10px;
-    transition: background-color 0.3s;
+    display: block;
   }
-
-  .desktop-nav a:hover {
-    background-color: #f0f0f0;
-  }
-
-  .mobile-menu-toggle {
-    display: none; /* Hide mobile menu toggle on desktop */
-  }
-
   .mobile-menu {
-    display: none; /* Initially hide mobile menu */
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    display: none;
   }
-
-  .mobile-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .mobile-menu-toggle {
+    display: none;
   }
-
-  .mobile-menu li {
-    padding: 10px;
-  }
-
-  .mobile-menu a {
-    text-decoration: none;
-    color: #333;
-  }
-
   @media (max-width: 768px) {
     .desktop-nav {
-      display: none; /* Hide desktop nav on mobile */
+      display: none;
     }
-
+    .mobile-menu {
+      display: block;
+    }
     .mobile-menu-toggle {
-      display: block; /* Show mobile menu toggle on mobile */
-    }
-
-    .mobile-menu.show {
-      display: block; /* Show mobile menu when toggled */
+      display: block;
     }
   }
 </style>
 
-<script>
-  function toggleMobileMenu() {
-    const mobileMenu = document.getElementById('mobileMenu');
-    mobileMenu.classList.toggle('show');
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Announcement bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_enabled",
+        "label": "Show announcement",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_home_page_only",
+        "label": "Show on home page only",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "announcement_bar_text",
+        "label": "Announcement text",
+        "default": "Announce something here"
+      },
+      {
+        "type": "url",
+        "id": "announcement_bar_link",
+        "label": "Announcement link",
+        "info": "Optional"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_max_width",
+        "min": 50,
+        "max": 450,
+        "step": 10,
+        "unit": "px",
+        "label": "Custom logo width",
+        "default": 250
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu",
+        "default": "main-menu"
+      }
+    ]
   }
+{% endschema %}
 
-  document.addEventListener("click", function(event) {
-    const mobileMenu = document.getElementById('mobileMenu');
-    const toggleButton = document.querySelector('.mobile-menu-toggle button');
-
-    if (!mobileMenu.contains(event.target) && !toggleButton.contains(event.target)) {
-      mobileMenu.classList.remove('show');
-    }
-  });
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if section.settings.logo %}
+    {% assign image_size = section.settings.logo.width | append:'x' %}
+    "logo": "https:{{ section.settings.logo | img_url: image_size }}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
 </script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}
