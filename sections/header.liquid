@@ -1,11 +1,9 @@
 <header class="site-header" x-data="{ open: false }">
     <div class="header-container">
-        <!-- Left Section: Shop Name -->
         <div class="shop-name">
             <a href="{{ shop.url }}">{{ shop.name }}</a>
         </div>
 
-        <!-- Middle Section: Navigation Menu -->
         <nav class="desktop-menu">
             <ul>
                 {% for link in linklists.main-menu.links %}
@@ -23,13 +21,14 @@
             </ul>
         </nav>
 
-        <!-- Mobile Menu Toggle -->
         <div class="mobile-menu-toggle">
             <button @click="open = !open" class="menu-button">Menu</button>
         </div>
 
-        <!-- Mobile Menu -->
         <nav class="mobile-menu" x-show="open" @click.away="open = false" x-transition>
+            <div class="shop-name-mobile">
+                <a href="{{ shop.url }}">{{ shop.name }}</a>
+            </div>
             <ul>
                 {% for link in linklists.main-menu.links %}
                     <li x-data="{ openDropdown: false }" class="menu-item">
@@ -57,9 +56,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
+        padding: 15px 30px;
         background-color: #ffffff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
     }
 
     .header-container {
@@ -70,10 +70,15 @@
     }
 
     .shop-name a {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
         text-decoration: none;
         color: #333;
+        transition: color 0.3s;
+    }
+
+    .shop-name a:hover {
+        color: #007bff;
     }
 
     .desktop-menu {
@@ -91,17 +96,19 @@
 
     .desktop-menu .menu-item {
         position: relative;
-        margin: 0 15px;
+        margin: 0 20px;
     }
 
     .desktop-menu a {
         text-decoration: none;
         color: #333;
-        padding: 10px;
-        transition: color 0.3s;
+        padding: 12px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
     }
 
     .desktop-menu a:hover {
+        background-color: #f0f0f0;
         color: #007bff;
     }
 
@@ -113,19 +120,36 @@
         background-color: #fff;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         z-index: 1000;
+        border-radius: 5px;
+        margin-top: 5px;
     }
 
     .dropdown[x-show="true"] {
         display: block;
     }
 
+    .dropdown li {
+        padding: 10px 15px;
+    }
+
+    .dropdown li a {
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dropdown li a:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
     .user-links-mobile {
-        padding: 10px;
+        padding: 15px;
         text-align: center;
     }
 
     .user-links-mobile a {
-        margin: 0 10px;
+        margin: 0 15px;
         text-decoration: none;
         color: #333;
         transition: color 0.3s;
@@ -139,9 +163,16 @@
         display: none; /* Hide mobile menu toggle on desktop */
     }
 
-    .mobile ```liquid
-    .menu {
+    .mobile-menu {
         display: none; /* Initially hide mobile menu */
+        position: absolute;
+        top: 60px; /* Adjust based on header height */
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 1000;
     }
 
     .mobile-menu[x-show="true"] {
@@ -165,11 +196,7 @@
         var mobileMenu = document.querySelector('.mobile-menu');
 
         mobileMenuToggle.addEventListener("click", function() {
-            if (mobileMenu.style.display === "block") {
-                mobileMenu.style.display = "none";
-            } else {
-                mobileMenu.style.display = "block";
-            }
+            mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
         });
 
         // Optional: Close the mobile menu when clicking outside of it
