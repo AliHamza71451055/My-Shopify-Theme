@@ -41,8 +41,8 @@
       <nav role="navigation" class="desktop-nav">
         <ul>
           {% for link in linklists[section.settings.menu].links %}
-            <li x-data="{ open: false }">
-              <a href="{{ link.url }}" @click.prevent="open = !open">
+            <li x-data="{ open: false }" @mouseover="open = true" @mouseleave="open = false">
+              <a href="{{ link.url }}">
                 {{ link.title }}
                 <span x-show="link.links.length > 0">▼</span>
               </a>
@@ -60,8 +60,8 @@
         </ul>
       </nav>
 
-      {% if shop.customer_accounts_enabled %}
-        <ul class="account-links">
+      <ul class="account-links">
+        {% if shop.customer_accounts_enabled %}
           {% if customer %}
             <li>
               <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
@@ -77,8 +77,8 @@
               <a href="/account/register">Create account</a>
             </li>
           {% endif %}
-        </ul>
-      {% endif %}
+        {% endif %}
+      </ul>
     </div>
   </header>
 
@@ -106,7 +106,49 @@
         </li>
       {% endfor %}
     </ul>
+    <ul class="account-links">
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <li>
+            <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
+          </li>
+          <li>
+            <a href="/account/logout">Log out</a>
+          </li>
+        {% else %}
+          <li>
+            <a href="/account/login">Log in</a>
+          </li>
+          <li>
+            <a href="/account/register">Create account</a>
+          </li>
+        {% endif %}
+      {% endif %}
+    </ul>
   </nav>
+
+  <div class="desktop-dropdown-container" x-show="open">
+    <nav class="desktop-dropdown">
+      <ul>
+        {% for link in linklists[section.settings.menu].links %}
+          <li>
+            <a href="{{ link.url }}">
+              {{ link.title }}
+            </a>
+            <ul>
+              {% for childlink in link.links %}
+                <li>
+                  <a href="{{ childlink.url }}">
+                    {{ childlink.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
 </section>
 
 <style>
@@ -169,36 +211,39 @@
     margin: 0;
   }
 
-  .desktop-dropdown {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-
-  .mobile-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .desktop-nav li,
-  .mobile-menu li {
+  .desktop-nav li {
     position: relative;
   }
 
-  .desktop-nav a,
-  .mobile-menu a {
+  .desktop-nav a {
     text-decoration: none;
     padding: 10px 15px;
     display: block;
     color: #333;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
   }
 
-  .desktop-nav a:hover,
-  .mobile-menu a:hover {
+  .desktop-nav a:hover {
     background-color: #f0f0f0; /* Light gray on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+  }
+
+  .desktop-dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .desktop-dropdown-container {
+    position: relative;
+  }
+
+  .desktop-dropdown-container:hover .desktop-dropdown {
+    display: block; /* Show dropdown on hover */
   }
 
   .mobile-menu {
@@ -226,7 +271,7 @@
       border-radius: 4px; /* Rounded corners */
       padding: 10px;
       cursor: pointer;
-      margin: 10px 0;
+      margin:  10px 0;
     }
   }
 </style>
@@ -297,7 +342,7 @@
     "@context": "http://schema.org",
     "@type": "Organization",
     "name": "{{ shop.name }}",
-   {% if section.settings.logo %}
+    {% if section.settings.logo %}
       {% assign image_size = section.settings.logo.width | append:'x' %}
       "logo": "https:{{ section.settings.logo | img_url: image_size }}",
     {% endif %}
