@@ -80,50 +80,50 @@
         {% endif %}
       </ul>
     </div>
-  </header>
 
-  <div class="mobile-menu-toggle">
-    <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
-  </div>
+    <div class="mobile-menu-toggle">
+      <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
+    </div>
 
-  <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition>
-    <ul>
-      {% for link in linklists[section.settings.menu].links %}
-        <li x-data="{ open: false }">
-          <a href="{{ link.url }}" @click.prevent="open = !open">
-            {{ link.title }}
-            <span x-show="link.links.length > 0">▼</span>
-          </a>
-          <ul x-show="open" @click.away="open = false" x-transition>
-            {% for childlink in link.links %}
-              <li>
-                <a href="{{ childlink.url }}">
-                  {{ childlink.title }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-    <ul class="account-links">
-      {% if shop.customer_accounts_enabled %}
-        {% if customer %}
-          <li>
-            <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
+    <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition>
+      <ul>
+        {% for link in linklists[section.settings.menu].links %}
+          <li x-data="{ open: false }">
+            <a href="{{ link.url }}" @click.prevent="open = !open">
+              {{ link.title }}
+              <span x-show="link.links.length > 0">▼</span>
+            </a>
+            <ul x-show="open" @click.away="open = false" x-transition>
+              {% for childlink in link.links %}
+                <li>
+                  <a href="{{ childlink.url }}">
+                    {{ childlink.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
           </li>
-          <li>
-            <a href="/account/logout">Log out</a>
-          </li>
-        {% else %}
-          <li><a href="/account/login">Log in</a></li>
-          <li>
-            <a href="/account/register">Create account</a>
-          </li>
+        {% endfor %}
+      </ul>
+      <ul class="account-links">
+        {% if shop.customer_accounts_enabled %}
+          {% if customer %}
+            <li>
+              <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
+            </li>
+            <li>
+              <a href="/account/logout">Log out</a>
+            </li>
+          {% else %}
+            <li><a href="/account/login">Log in</a></li>
+            <li>
+              <a href="/account/register">Create account</a>
+            </li>
+          {% endif %}
         {% endif %}
-      {% endif %}
-    </ul>
-  </nav>
+      </ul>
+    </nav>
+  </header>
 
   <div class="desktop-dropdown-container" x-show="open">
     <nav class="desktop-dropdown">
