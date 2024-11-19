@@ -135,56 +135,20 @@
     }
 
     .user-links-mobile a:hover {
- color: #007bff;
+        color: #007bff;
     }
 
     .mobile-menu-toggle {
         display: none; /* Hide mobile menu toggle on desktop */
     }
 
-    .mobile-menu {
-        display: none; /* Hide mobile menu by default */
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: #ffffff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
+    .mobile ```liquid
+    .menu {
+        display: none; /* Initially hide mobile menu */
     }
 
     .mobile-menu[x-show="true"] {
-        display: block; /* Show mobile menu when open */
-    }
-
-    .shop-name-mobile {
-        padding: 10px;
-        text-align: center;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .mobile-menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .mobile-menu .menu-item {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .mobile-menu a {
-        text-decoration: none;
-        color: #333;
-        display: block;
-        padding: 10px;
-        transition: background-color 0.3s;
-    }
-
-    .mobile-menu a:hover {
-        background-color: #f0f0f0;
+        display: block; /* Show mobile menu when toggled */
     }
 
     @media (max-width: 768px) {
@@ -197,3 +161,25 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var mobileMenuToggle = document.querySelector('.mobile-menu-toggle button');
+        var mobileMenu = document.querySelector('.mobile-menu');
+
+        mobileMenuToggle.addEventListener("click", function() {
+            if (mobileMenu.style.display === "block") {
+                mobileMenu.style.display = "none";
+            } else {
+                mobileMenu.style.display = "block";
+            }
+        });
+
+        // Optional: Close the mobile menu when clicking outside of it
+        document.addEventListener("click", function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                mobileMenu.style.display = "none";
+            }
+        });
+    });
+</script>
