@@ -1,209 +1,237 @@
-<header class="site-header" x-data="{ open: false }">
-    <div class="header-container">
-        <div class="shop-name">
-            <a href="{{ shop.url }}">{{ shop.name }}</a>
-        </div>
+{%- comment -%}
+  This is a required section for the Shopify Theme Store.
+  It is available in the "Header" section in the theme editor.
 
-        <nav class="desktop-menu">
-            <ul>
-                {% for link in linklists.main-menu.links %}
-                    <li x-data="{ openDropdown: false }" class="menu-item">
-                        <a href="{{ link.url }}" @click.prevent="openDropdown = !openDropdown">{{ link.title }}</a>
-                        {% if link.links %}
-                            <ul class="dropdown" x-show="openDropdown" @click.away="openDropdown = false" x-transition>
-                                {% for sublink in link.links %}
-                                    <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
+  Theme Store required settings
+  - Show announcement
+  - Text: message to announce
+  - Link: link of the announcement bar
 
-        <div class="mobile-menu-toggle">
-            <button @click="open = !open" class="menu-button">Menu</button>
-        </div>
-
-        <nav class="mobile-menu" x-show="open" @click.away="open = false" x-transition>
-            <div class="shop-name-mobile">
-                <a href="{{ shop.url }}">{{ shop.name }}</a>
-            </div>
-            <ul>
-                {% for link in linklists.main-menu.links %}
-                    <li x-data="{ openDropdown: false }" class="menu-item">
-                        <a href="{{ link.url }}" @click.prevent="openDropdown = !openDropdown">{{ link.title }}</a>
-                        {% if link.links %}
-                            <ul class="dropdown" x-show="openDropdown" @click.away="openDropdown = false" x-transition>
-                                {% for sublink in link.links %}
-                                    <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="user-links-mobile">
-                <a href="/account">Account</a>
-                <a href="/cart">Cart</a>
-            </div>
-        </nav>
+  Theme Store optional settings
+  - Home page only: only shows on the home page
+{%- endcomment -%}
+<section data-section-id="{{ section.id }}" data-section-type="header">
+  {%- if section.settings.announcement_bar_enabled -%}
+    <div>
+      {%- if section.settings.announcement_bar_home_page_only == false or template.name == 'index' -%}
+        {%- if section.settings.announcement_bar_link != blank -%}
+          <a href="{{ section.settings.announcement_bar_link }}">
+            {{ section.settings.announcement_bar_text | escape }}
+          </a>
+        {%- else -%}
+          <p>{{ section.settings.announcement_bar_text | escape }}</p>
+        {%- endif -%}
+      {%- endif -%}
     </div>
-</header>
+  {%- endif -%}
 
-<style>
-    .site-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 30px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s;
+  <header role="banner">
+    {% if template.name == 'index' %}
+      <h1>
+    {% else %}
+      <div class="h1">
+    {% endif %}
+        <a href="/" class="logo-image">
+          {% if section.settings.logo != blank %}
+            {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+            <img src="{{ section.settings.logo | img_url: image_size }}"
+                srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                alt="{{ section.settings.logo.alt | default: shop.name }}">
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+        </a>
+    {% if template.name == 'index' %}
+      </h1>
+    {% else %}
+      </div>
+    {% endif %}
+
+    <a href="/cart">
+      {% include 'icon-cart' %}
+      {{ 'layout.cart.title' | t }}
+      ({{ cart.item_count }} {{ 'layout.cart.items_count' | t: count: cart.item_count }})
+    </a>
+
+    {% if shop.customer_accounts_enabled %}
+      <ul>
+        {% if customer %}
+          <li>
+            {% if customer.first_name != blank %}
+              {% capture first_name %}<a href="/account">{{ customer.first_name }}</a>{% endcapture %}
+              {{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}
+            {% else %}
+              <a href="/account">{{ 'layout.customer.account' | t }}</a>
+            {% endif %}
+          </li>
+          <li>
+            {{ 'layout.customer.log_out' | t | customer_logout_link }}
+          </li>
+        {% else %}
+          <li>
+            {{ 'layout.customer.log_in' | t | customer_login_link }}
+          </li>
+          <li>
+            {{ 'layout.customer.create_account' | t | customer_register_link }}
+          </li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+    <form action="/search" method="get" role="search">
+      <label for="Search-{{ section.id }}" class="label-hidden">
+        {{ 'general.search.placeholder' | t }}
+      </label>
+
+      <input type="search"
+        name="q"
+        id="Search-{{ section.id }}"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}">
+
+      <button type="submit" class="button">
+        {% include 'icon-search' %}
+        <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+      </button>
+    </form>
+  </header>
+
+  <nav role="navigation">
+    <ul>
+      {% for link in linklists[section.settings.menu].links %}
+        {% if link.links != blank %}
+          <li>
+            <a href="{{ link.url }}">
+              {{ link.title }}
+              {% include 'icon-arrow-down' %}
+            </a>
+            <ul>
+              {% for childlink in link.links %}
+                <li>
+                  <a href="{{ childlink.url }}">
+                    {{ childlink.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <li>
+            <a href="{{ link.url }}">
+              {{ link.title }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+</section>
+
+{% if section.settings.logo != blank %}
+  <style>
+    .logo-image {
+      display: block;
+      max-width: {{ section.settings.logo_max_width }}px;
     }
+  </style>
+{% endif %}
 
-    .header-container {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        position: relative;
-    }
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Announcement bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_enabled",
+        "label": "Show announcement",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_home_page_only",
+        "label": "Show on home page only",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "announcement_bar_text",
+        "label": "Announcement text",
+        "default": "Announce something here"
+      },
+      {
+        "type": "url",
+        "id": "announcement_bar_link",
+        "label": "Announcement link",
+        "info": "Optional"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_max_width",
+        "min": 50,
+        "max": 450,
+        "step": 10,
+        "unit": "px",
+        "label": "Custom logo width",
+        "default": 250
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu",
+        "default": "main-menu"
+      }
+    ]
+  }
+{% endschema %}
 
-    .shop-name a {
-        font-size: 28px;
-        font-weight: bold;
-        text-decoration: none;
-        color: #333;
-        transition: color 0.3s;
-    }
-
-    .shop-name a:hover {
-        color: #007bff;
-    }
-
-    .desktop-menu {
-        flex-grow: 1;
-        text-align: center;
-    }
-
-    .desktop-menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-    }
-
-    .desktop-menu .menu-item {
-        position: relative;
-        margin: 0 20px;
-    }
-
-    .desktop-menu a {
-        text-decoration: none;
-        color: #333;
-        padding: 12px 15px;
-        border-radius: 5px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .desktop-menu a:hover {
-        background-color: #f0f0f0;
-        color: #007bff;
-    }
-
-    .dropdown {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        border-radius: 5px;
-        margin-top: 5px;
-    }
-
-    .dropdown[x-show="true"] {
-        display: block;
-    }
-
-    .dropdown li {
-        padding: 10px 15px;
-    }
-
-    .dropdown li a {
-        color: #333;
-        text-decoration: none;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .dropdown li a:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .user-links-mobile {
-        padding: 15px;
-        text-align: center;
-    }
-
-    .user-links-mobile a {
-        margin: 0 15px;
-        text-decoration: none;
-        color: #333;
-        transition: color 0.3s;
-    }
-
-    .user-links-mobile a:hover {
-        color: #007bff;
-    }
-
-    .mobile-menu-toggle {
-        display: none; /* Hide mobile menu toggle on desktop */
-    }
-
-    .mobile-menu {
-        display: none; /* Initially hide mobile menu */
-        position: absolute;
-        top: 60px; /* Adjust based on header height */
-        left: 0;
-        right: 0;
-        background-color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        z-index: 1000;
-    }
-
-    .mobile-menu[x-show="true"] {
-        display: block; /* Show mobile menu when toggled */
-    }
-
-    @media (max-width: 768px) {
-        .desktop-menu {
-            display: none; /* Hide desktop menu on mobile */
-        }
-
-        .mobile-menu-toggle {
-            display: block; /* Show mobile menu toggle on mobile */
-        }
-    }
-</style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var mobileMenuToggle = document.querySelector('.mobile-menu-toggle button');
-        var mobileMenu = document.querySelector('.mobile-menu');
-
-        mobileMenuToggle.addEventListener("click", function() {
-            mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
-        });
-
-        // Optional: Close the mobile menu when clicking outside of it
-        document.addEventListener("click", function(event) {
-            if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
-                mobileMenu.style.display = "none";
-            }
-        });
-    });
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if section.settings.logo %}
+    {% assign image_size = section.settings.logo.width | append:'x' %}
+    "logo": "https:{{ section.settings.logo | img_url: image_size }}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
 </script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}
