@@ -1,377 +1,96 @@
-<header>
-  <div class="logo-container" x-data="{mobileMenuOpen: false}">
-    <a href="{{ shop.url }}">
-      {% if shop.logo %}
-        <img src="{{ shop.logo.src | img_url: 'large' }}" alt="{{ shop.logo.alt | escape }}">
-      {% else %}
-        <h1 class="shop-name">{{ shop.name }}</h1>
-      {% endif %}
-    </a>
-  </div>
-
-  <div class="button-container">
-    <button type="button" class="button" @click="mobileMenuOpen = !mobileMenuOpen">
-      {% render 'hamburger-icon' %}
-    </button>
-  </div>
-
-  <div class="mobile-menu" x-show="pen">
-    <div class="menu-container">
-      <div class="menu-header">
-        <h1 class="menu-title">{{ section.settings.shop-name }}</h1>
-        <button type="button" class="close-button" @click="mobileMenuOpen = false">CLOSE</button>
-      </div>
-      <nav class="menu-links" x-data="{ open: false }">
-        {% for link in linklists['main-menu'].links %}
-          <a href="{{ link.url }}" class="menu-link">{{ link.title }}</a>
-          {% if link.links != blank %}
-            <div class="submenu">
-              <button x-on:click="open = !open" type="button" class="submenu-button">{{ link.title }}</button>
-              <div class="submenu-links">
-                {% for sublink in link.links %}
-                  <a href="{{ sublink.url }}" class="submenu-link">{{ sublink.title }}</a>
-                {% endfor %}
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </nav>
-    </div>
-  </div>
-
-  <nav class="desktop-menu">
-    {% for link in linklists['main-menu'].links %}
-      {% if link.links != blank %}
-        <div class="dropdown">
-          <button class="dropdown-btn">
-            {{ link.title }}
-            {% render 'dropdown-icon' %}
-          </button>
-          <div class="dropdown-content">
-            <div class="card">
-              <div class="content">
-                {% for sublink in link.links %}
-                  <a href="{{ sublink.url }}" class="sublink">
-                    <div class="sublink-text">
-                      <p>{{ sublink.title }}</p>
-                    </div>
-                  </a>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
+<header class="site-header">
+    <div class="header-container">
+        <div class="logo">
+            <a href="{{ shop.url }}">
+                <img src="{{ settings.logo | img_url: 'medium' }}" alt="{{ shop.name }}">
+            </a>
         </div>
-      {% else %}
-        <a href="{{ link.url }}" class="{% if link.active %} active-link {% else %} inactive-link {% endif %}">
-          {{ link.title }}
-        </a>
-      {% endif %}
-    {% endfor %}
-  </nav>
 
-  <div class="user-links">
-    <a href="{{ routes.cart_url }}" class="cart-link">
-      <div class="cart-icon">
-        {% render 'cart-icon' %}
-      </div>
-    </a>
-    <a href="{{ routes.account_login_url }}">Login</a>
-    <a href="{{ routes.account_register_url }}">Register</a>
-  </div>
+        <nav class="desktop-menu">
+            <ul>
+                {% for link in linklists.main-menu.links %}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <div class="mobile-menu-toggle">
+            <button id="mobile-menu-button">Menu</button>
+        </div>
+
+        <nav class="mobile-menu" id="mobile-menu">
+            <ul>
+                {% for link in linklists.main-menu.links %}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
 </header>
 
-
-{% schema %}
-{
-  "name": "header",
-  "tag": "header",
-  "settings": [
-    {
-      "type": "text",
-      "id": "shop-name",
-      "label": "Shop Name",
-      "default": "{{ shop.name }}"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "header-menu",
-      "default": "main-menu"
-    }
-  ]
-}  
-{% endschema %}
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
+    });
+</script>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 35px;
-    height: 80px;
-    width: 100vw;
-    background-color: #fff;
-  }
-
-  .logo-container img {
-    max-width: 200px;
-    height: auto;
-  }
-
-  .shop-name {
-    font-size: 30px;
-    color: black;
-    text-decoration: none;
-  }
-
-  .button-container button {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-
-  .button-container button:hover {
-    color: #007bff;
-  }
-
-  .mobile-menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 50vw;
-  }
-
-  .menu-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 16px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .menu-title {
-    font-size: 1.25rem;
-    color: #6b7280;
-  }
-
-  .close-button {
-    background-color: white;
-    border: none;
-    color: #6b7280;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .menu-links {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .menu-link {
-    display: block;
-    margin: -12px;
-    padding: 12px;
-    color: #6b7280;
-    text-decoration: none;
-    border-radius: 4px;
-  }
-
-  .menu-link:hover {
-    color: #1f2937;
-    background-color: #f9fafb;
-  }
-
-  .submenu {
-    margin-top: 16px;
-  }
-
-  .submenu-button {
-    background: none;
-    border: none;
-    color: #6b7280;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    text-align: left;
-  }
-
-  .submenu-links {
-    padding-top: 12px;
-  }
-
-  .submenu-link {
-    display: block;
-    margin: -12px;
-    padding: 12px;
-    color: #6b7280;
-    text-decoration: none;
-    border-radius: 4px;
-  }
-
-  .submenu-link:hover {
-    color: #1f2937;
-    background-color: #f9fafb;
-  }
-
-  .dropdown-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .button {
-    background-color: white;
-    padding: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    outline: none;
-  }
-
-  nav {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-
-  nav a,
-  nav button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.2s ease;
-    border: none;
-    background: none;
-    height: 80px;
-    padding: 10px;
-  }
-
-  nav a:hover,
-  nav button:hover {
-    color: #007bff;
-    transition: 0.2s ease;
-  }
-
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    width: 150px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-  }
-
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-
-  .card {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-
-  .sublink {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
-  .sublink:hover {
-    background-color: #ddd;
-  }
-
-  .user-links {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-
-  .user-links a {
-    margin: 0 10px;
-    font-weight: 500;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .user-links a:hover {
-    color: #007bff;
-    transition: 0.2s ease;
-  }
-
-  .cart-icon:hover {
-    color: red;
-  }
-
-  .active-link {
-    color: #007bff;
-    text-decoration: none;
-  }
-
-  /* Media Queries */
-  @media (min-width: 768px) {
-    .button-container {
-      display: none;
+    .site-header {
+        background-color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-    .mobile-menu {
-      display: none !important;
-    }
+
     .desktop-menu {
-      display: flex;
+        display: flex;
     }
-  }
 
-  @media (max-width: 767px) {
-    .desktop-menu {
-      display: none;
+    .desktop-menu ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
     }
+
+    .desktop-menu li {
+        margin: 0 15px;
+    }
+
     .mobile-menu {
-      display: block;
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #fff;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    .button-container {
-      display: flex;
+
+    .mobile-menu.active {
+        display: block;
     }
-  }
+
+    .mobile-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-menu li {
+        padding: 10px 20px;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-menu {
+            display: none;
+        }
+
+        .mobile-menu-toggle {
+            display: block;
+        }
+    }
 </style>
