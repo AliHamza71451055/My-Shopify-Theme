@@ -4,7 +4,7 @@
       {% if shop.logo %}
         <img src="{{ shop.logo.src | img_url: 'large' }}" alt="{{ shop.logo.alt | escape }}">
       {% else %}
-        <h1 class="shop-name">{{ shop.name }}</h1>
+        <h1 class="shop-name">{{ section.settings.shop-name }}</h1>
       {% endif %}
     </a>
   </div>
@@ -18,7 +18,7 @@
   <div class="mobile-menu" x-show="pen">
     <div class="menu-container">
       <div class="menu-header">
-        <h1 class="menu-title">{{ shop.name }}</h1>
+        <h1 class="menu-title">{{ section.settings.shop-name }}</h1>
         <button type="button" class="close-button" @click="mobileMenuOpen = false">CLOSE</button>
       </div>
       <nav class="menu-links" x-data="{ open: false }">
@@ -79,6 +79,23 @@
     <a href="{{ routes.account_register_url }}">Register</a>
   </div>
 </header>
+
+
+{% schema %}
+{
+  "name": "header",
+  "tag": "header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "shop-name",
+      "label": "Shop Name",
+      "default": "{{ shop.name }}"
+    }
+  ]
+}  
+{% endschema %}
+
 
 <style>
   * {
