@@ -20,43 +20,45 @@
       {% else %}
         <div class="h1">
       {% endif %}
-          <a href="/" class="logo-image">
-            {% if section.settings.logo != blank %}
-              {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
-              <img src="{{ section.settings.logo | img_url: image_size }}"
-                  srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
-                  alt="{{ section.settings.logo.alt | default: shop.name }}">
-            {% else %}
-              {{ shop.name }}
-            {% endif %}
-          </a>
+      <a href="/" class="logo-image">
+        {% if section.settings.logo != blank %}
+          {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+          <img
+            src="{{ section.settings.logo | img_url: image_size }}"
+            srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 2 }} 2x"
+            alt="{{ section.settings.logo.alt | default: shop.name }}"
+          >
+        {% else %}
+          {{ shop.name }}
+        {% endif %}
+      </a>
       {% if template.name == 'index' %}
         </h1>
       {% else %}
         </div>
       {% endif %}
 
-            <nav role="navigation" class="desktop-nav">
-    <ul>
-      {% for link in linklists[section.settings.menu].links %}
-        <li x-data="{ open: false }">
-          <a href="{{ link.url }}" @click.prevent="open = !open">
-            {{ link.title }}
-            <span x-show="link.links.length > 0">▼</span>
-          </a>
-          <ul x-show="open" @click.away="open = false" x-transition>
-            {% for childlink in link.links %}
-              <li>
-                <a href="{{ childlink.url }}">
-                  {{ childlink.title }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+      <nav role="navigation" class="desktop-nav">
+        <ul>
+          {% for link in linklists[section.settings.menu].links %}
+            <li x-data="{ open: false }">
+              <a href="{{ link.url }}" @click.prevent="open = !open">
+                {{ link.title }}
+                <span x-show="link.links.length > 0">▼</span>
+              </a>
+              <ul x-show="open" @click.away="open = false" x-transition>
+                {% for childlink in link.links %}
+                  <li>
+                    <a href="{{ childlink.url }}">
+                      {{ childlink.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
 
       {% if shop.customer_accounts_enabled %}
         <ul class="account-links">
@@ -80,13 +82,11 @@
     </div>
   </header>
 
-
-
   <div class="mobile-menu-toggle">
     <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
   </div>
 
-  <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition >
+  <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition>
     <ul>
       {% for link in linklists[section.settings.menu].links %}
         <li x-data="{ open: false }">
@@ -160,17 +160,20 @@
     color: #007bff; /* Change color on hover */
   }
 
-  .desktop-nav ul, .mobile-menu ul {
+  .desktop-nav ul,
+  .mobile-menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
 
-  .desktop-nav li, .mobile-menu li {
+  .desktop-nav li,
+  .mobile-menu li {
     position: relative;
   }
 
-  .desktop-nav a, .mobile-menu a {
+  .desktop-nav a,
+  .mobile-menu a {
     text-decoration: none;
     padding: 10px 15px;
     display: block;
@@ -178,7 +181,8 @@
     transition: background-color 0.3s;
   }
 
-  .desktop-nav a:hover, .mobile-menu a:hover {
+  .desktop-nav a:hover,
+  .mobile-menu a:hover {
     background-color: #f0f0f0; /* Light gray on hover */
   }
 
@@ -213,87 +217,87 @@
 </style>
 
 {% schema %}
-  {
-    "name": "Header",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Announcement bar"
-      },
-      {
-        "type": "checkbox",
-        "id": "announcement_bar_enabled",
-        "label": "Show announcement",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "announcement_bar_home_page_only",
-        "label": "Show on home page only",
-        "default": true
-      },
-      {
-        "type": "text",
-        "id": "announcement_bar_text",
-        "label": "Announcement text",
-        "default": "Announce something here"
-      },
-      {
-        "type": "url",
-        "id": "announcement_bar_link",
-        "label": "Announcement link",
-        "info": "Optional"
-      },
-      {
-        "type": "header",
-        "content": "Header"
-      },
-      {
-        "type": "image_picker",
-        "id": "logo",
-        "label": "Logo image"
-      },
-      {
-        "type": "range",
-        "id": "logo_max_width",
-        "min": 50,
-        "max": 450,
-        "step": 10,
-        "unit": "px",
-        "label": "Custom logo width",
-        "default": 250
-      },
-      {
-        "type": "link_list",
-        "id": "menu",
-        "label": "Menu",
-        "default": "main-menu"
-      }
-    ]
-  }
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_bar_enabled",
+      "label": "Show announcement",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_bar_home_page_only",
+      "label": "Show on home page only",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_bar_text",
+      "label": "Announcement text",
+      "default": "Announce something here"
+    },
+    {
+      "type": "url",
+      "id": "announcement_bar_link",
+      "label": "Announcement link",
+      "info": "Optional"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 50,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Custom logo width",
+      "default": 250
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
 {% endschema %}
 
 <script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Organization",
-  "name": "{{ shop.name }}",
- {% if section.settings.logo %}
-    {% assign image_size = section.settings.logo.width | append:'x' %}
-    "logo": "https:{{ section.settings.logo | img_url: image_size }}",
-  {% endif %}
-  "sameAs": [
-    "{{ settings.social_twitter_link }}",
-    "{{ settings.social_facebook_link }}",
-    "{{ settings.social_pinterest_link }}",
-    "{{ settings.social_instagram_link }}",
-    "{{ settings.social_tumblr_link }}",
-    "{{ settings.social_snapchat_link }}",
-    "{{ settings.social_youtube_link }}",
-    "{{ settings.social_vimeo_link }}"
-  ],
-  "url": "{{ shop.url }}{{ page.url }}"
-}
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "{{ shop.name }}",
+   {% if section.settings.logo %}
+      {% assign image_size = section.settings.logo.width | append:'x' %}
+      "logo": "https:{{ section.settings.logo | img_url: image_size }}",
+    {% endif %}
+    "sameAs": [
+      "{{ settings.social_twitter_link }}",
+      "{{ settings.social_facebook_link }}",
+      "{{ settings.social_pinterest_link }}",
+      "{{ settings.social_instagram_link }}",
+      "{{ settings.social_tumblr_link }}",
+      "{{ settings.social_snapchat_link }}",
+      "{{ settings.social_youtube_link }}",
+      "{{ settings.social_vimeo_link }}"
+    ],
+    "url": "{{ shop.url }}{{ page.url }}"
+  }
 </script>
 
 {% if template.name == 'index' %}
