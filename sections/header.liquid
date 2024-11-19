@@ -1,29 +1,62 @@
 <header class="site-header">
     <div class="header-container">
-        <div class="logo">
-            <a href="{{ shop.url }}">
-                <img src="{{ settings.logo | img_url: 'medium' }}" alt="{{ shop.name }}">
-            </a>
+        <!-- Left Section: Shop Name -->
+        <div class="shop-name">
+            <a href="{{ shop.url }}">{{ shop.name }}</a>
         </div>
 
+        <!-- Middle Section: Navigation Menu -->
         <nav class="desktop-menu">
             <ul>
                 {% for link in linklists.main-menu.links %}
-                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    <li>
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                        {% if link.links %}
+                            <ul class="dropdown">
+                                {% for sublink in link.links %}
+                                    <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         </nav>
 
+        <!-- Right Section: User Links and Cart -->
+        <div class="user-links">
+            <a href="/account">Account</a>
+            <a href="/cart">Cart</a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
         <div class="mobile-menu-toggle">
             <button id="mobile-menu-button">Menu</button>
         </div>
 
+        <!-- Mobile Menu -->
         <nav class="mobile-menu" id="mobile-menu">
+            <div class="shop-name-mobile">
+                <a href="{{ shop.url }}">{{ shop.name }}</a>
+            </div>
             <ul>
                 {% for link in linklists.main-menu.links %}
-                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    <li>
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                        {% if link.links %}
+                            <ul class="dropdown">
+                                {% for sublink in link.links %}
+                                    <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
+            <div class="user-links-mobile">
+                <a href="/account">Account</a>
+                <a href="/cart">Cart</a>
+            </div>
         </nav>
     </div>
 </header>
@@ -38,59 +71,95 @@
 
 <style>
     .site-header {
-        background-color: #fff;
-        padding: 10px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 10px 20px;
+        background-color: #fff;
+    }
+
+    .header-container {
+        display: flex;
+        width: 100%;
+        align-items: center;
+    }
+
+    .shop-name a {
+        font-size: 24px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
     }
 
     .desktop-menu {
-        display: flex;
+        flex-grow: 1;
+        text-align: center;
     }
 
     .desktop-menu ul {
         list-style: none;
-        display: flex;
-        margin: 0;
         padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
     }
 
     .desktop-menu li {
+        position: relative;
         margin: 0 15px;
     }
 
+    .desktop-menu a {
+        text-decoration: none;
+        color: #333;
+        padding: 10px;
+    }
+
+    .dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .desktop-menu li:hover .dropdown {
+        display: block;
+    }
+
+    .user-links {
+        display: flex;
+        gap: 15px;
+    }
+
+    .user-links a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    /* Mobile Styles */
     .mobile-menu {
         display: none;
+        flex-direction: column;
         position: absolute;
         top: 60px;
         left: 0;
+        right: 0;
         background-color: #fff;
-        width: 100%;
+        padding: 20px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .mobile-menu.active {
-        display: block;
+        display: flex;
+    }
+
+    .mobile-menu .shop-name-mobile {
+        margin-bottom: 15px;
     }
 
     .mobile-menu ul {
         list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .mobile-menu li {
-        padding: 10px 20px;
-    }
-
-    @media (max-width: 768px) {
-        .desktop-menu {
-            display: none;
-        }
-
-        .mobile-menu-toggle {
-            display: block;
-        }
-    }
-</style>
+       
