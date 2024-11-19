@@ -1,15 +1,3 @@
-{%- comment -%}
-  This is a required section for the Shopify Theme Store.
-  It is available in the "Header" section in the theme editor.
-
-  Theme Store required settings
-  - Show announcement
-  - Text: message to announce
-  - Link: link of the announcement bar
-
-  Theme Store optional settings
-  - Home page only: only shows on the home page
-{%- endcomment -%}
 <section data-section-id="{{ section.id }}" data-section-type="header" x-data="{ openMobileMenu: false }">
   {%- if section.settings.announcement_bar_enabled -%}
     <div class="announcement-bar">
@@ -48,6 +36,28 @@
         </div>
       {% endif %}
 
+            <nav role="navigation" class="desktop-nav">
+    <ul>
+      {% for link in linklists[section.settings.menu].links %}
+        <li x-data="{ open: false }">
+          <a href="{{ link.url }}" @click.prevent="open = !open">
+            {{ link.title }}
+            <span x-show="link.links.length > 0">▼</span>
+          </a>
+          <ul x-show="open" @click.away="open = false" x-transition>
+            {% for childlink in link.links %}
+              <li>
+                <a href="{{ childlink.url }}">
+                  {{ childlink.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
       {% if shop.customer_accounts_enabled %}
         <ul class="account-links">
           {% if customer %}
@@ -70,27 +80,7 @@
     </div>
   </header>
 
-  <nav role="navigation" class="desktop-nav">
-    <ul>
-      {% for link in linklists[section.settings.menu].links %}
-        <li x-data="{ open: false }">
-          <a href="{{ link.url }}" @click.prevent="open = !open">
-            {{ link.title }}
-            <span x-show="link.links.length > 0">▼</span>
-          </a>
-          <ul x-show="open" @click.away="open = false" x-transition>
-            {% for childlink in link.links %}
-              <li>
-                <a href="{{ childlink.url }}">
-                  {{ childlink.title }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+
 
   <div class="mobile-menu-toggle">
     <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
