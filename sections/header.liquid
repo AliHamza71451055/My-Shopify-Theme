@@ -30,9 +30,6 @@
 
         <!-- Mobile Menu -->
         <nav class="mobile-menu" x-show="open" @click.away="open = false" x-transition>
-            <div class="shop-name-mobile">
-                <a href="{{ shop.url }}">{{ shop.name }}</a>
-            </div>
             <ul>
                 {% for link in linklists.main-menu.links %}
                     <li x-data="{ openDropdown: false }" class="menu-item">
