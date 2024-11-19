@@ -23,12 +23,6 @@
             </ul>
         </nav>
 
-        <!-- Right Section: User Links and Cart -->
-        <div class="user-links">
-            <a href="/account">Account</a>
-            <a href="/cart">Cart</a>
-        </div>
-
         <!-- Mobile Menu Toggle -->
         <div class="mobile-menu-toggle">
             <button @click="open = !open" class="menu-button">Menu</button>
@@ -128,19 +122,20 @@
         display: block;
     }
 
-    .user-links {
-        display: flex;
-        gap: 15px;
+    .user-links-mobile {
+        padding: 10px;
+        text-align: center;
     }
 
-    .user-links a {
+    .user-links-mobile a {
+        margin: 0 10px;
         text-decoration: none;
         color: #333;
         transition: color 0.3s;
     }
 
-    .user-links a:hover {
-        color: #007bff;
+    .user-links-mobile a:hover {
+ color: #007bff;
     }
 
     .mobile-menu-toggle {
@@ -190,15 +185,6 @@
 
     .mobile-menu a:hover {
         background-color: #f0f0f0;
-    }
-
-    .user-links-mobile {
-        padding: 10px;
-        text-align: center;
-    }
-
-    .user-links-mobile a {
-        margin: 0 10px;
     }
 
     @media (max-width: 768px) {
