@@ -1,4 +1,4 @@
-<header class="site-header">
+<header class="site-header" x-data="{ open: false }">
     <div class="header-container">
         <!-- Left Section: Shop Name -->
         <div class="shop-name">
@@ -9,10 +9,10 @@
         <nav class="desktop-menu">
             <ul>
                 {% for link in linklists.main-menu.links %}
-                    <li>
-                        <a href="{{ link.url }}">{{ link.title }}</a>
+                    <li x-data="{ openDropdown: false }" class="menu-item">
+                        <a href="{{ link.url }}" @click.prevent="openDropdown = !openDropdown">{{ link.title }}</a>
                         {% if link.links %}
-                            <ul class="dropdown">
+                            <ul class="dropdown" x-show="openDropdown" @click.away="openDropdown = false" x-transition>
                                 {% for sublink in link.links %}
                                     <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
                                 {% endfor %}
@@ -31,20 +31,20 @@
 
         <!-- Mobile Menu Toggle -->
         <div class="mobile-menu-toggle">
-            <button id="mobile-menu-button">Menu</button>
+            <button @click="open = !open" class="menu-button">Menu</button>
         </div>
 
         <!-- Mobile Menu -->
-        <nav class="mobile-menu" id="mobile-menu">
+        <nav class="mobile-menu" x-show="open" @click.away="open = false" x-transition>
             <div class="shop-name-mobile">
                 <a href="{{ shop.url }}">{{ shop.name }}</a>
             </div>
             <ul>
                 {% for link in linklists.main-menu.links %}
-                    <li>
-                        <a href="{{ link.url }}">{{ link.title }}</a>
+                    <li x-data="{ openDropdown: false }" class="menu-item">
+                        <a href="{{ link.url }}" @click.prevent="openDropdown = !openDropdown">{{ link.title }}</a>
                         {% if link.links %}
-                            <ul class="dropdown">
+                            <ul class="dropdown" x-show="openDropdown" @click.away="openDropdown = false" x-transition>
                                 {% for sublink in link.links %}
                                     <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
                                 {% endfor %}
@@ -61,27 +61,21 @@
     </div>
 </header>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('active');
-        });
-    });
-</script>
-
 <style>
     .site-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
-        background-color: #fff;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .header-container {
         display: flex;
         width: 100%;
         align-items: center;
+        position: relative;
     }
 
     .shop-name a {
@@ -104,7 +98,7 @@
         justify-content: center;
     }
 
-    .desktop-menu li {
+    .desktop-menu .menu-item {
         position: relative;
         margin: 0 15px;
     }
@@ -113,6 +107,11 @@
         text-decoration: none;
         color: #333;
         padding: 10px;
+        transition: color 0.3s;
+    }
+
+    .desktop-menu a:hover {
+        color: #007bff;
     }
 
     .dropdown {
@@ -125,7 +124,7 @@
         z-index: 1000;
     }
 
-    .desktop-menu li:hover .dropdown {
+    .dropdown[x-show="true"] {
         display: block;
     }
 
@@ -137,29 +136,4 @@
     .user-links a {
         text-decoration: none;
         color: #333;
-    }
-
-    /* Mobile Styles */
-    .mobile-menu {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .mobile-menu.active {
-        display: flex;
-    }
-
-    .mobile-menu .shop-name-mobile {
-        margin-bottom: 15px;
-    }
-
-    .mobile-menu ul {
-        list-style: none;
-       
+        transition: color 
