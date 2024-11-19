@@ -11,7 +11,11 @@
   "sections": {
     "404": {
       "type": "404",
-      "settings": {}
+      "settings": {
+        "title": "Not Found",
+        "subtext": "The Page you are looking does not exist",
+        "button": "Go To HomePage"
+      }
     }
   },
   "order": [
