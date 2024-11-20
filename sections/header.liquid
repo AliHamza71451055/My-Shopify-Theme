@@ -41,12 +41,12 @@
       <nav role="navigation" class="desktop-nav">
         <ul>
           {% for link in linklists[section.settings.menu].links %}
-            <li x-data="{ open: false }" @mouseover="open = true" @mouseleave="open = false">
-              <a href="{{ link.url }}">
+            <li x-data="{ open: false }">
+              <a href="{{ link.url }}" @click.prevent="open = !open">
                 {{ link.title }}
                 <span x-show="link.links.length > 0">▼</span>
               </a>
-              <ul x-show="open" @click.away="open = false" x-transition class="desktop-dropdown">
+              <ul x-show="open" @click.away="open = false" x-transition>
                 {% for childlink in link.links %}
                   <li>
                     <a href="{{ childlink.url }}">
@@ -60,8 +60,8 @@
         </ul>
       </nav>
 
-      <ul class="account-links">
-        {% if shop.customer_accounts_enabled %}
+      {% if shop.customer_accounts_enabled %}
+        <ul class="account-links">
           {% if customer %}
             <li>
               <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
@@ -77,76 +77,36 @@
               <a href="/account/register">Create account</a>
             </li>
           {% endif %}
-        {% endif %}
-      </ul>
+        </ul>
+      {% endif %}
     </div>
-
-    <div class="mobile-menu-toggle">
-      <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
-    </div>
-
-    <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition>
-      <ul>
-        {% for link in linklists[section.settings.menu].links %}
-          <li x-data="{ open: false }">
-            <a href="{{ link.url }}" @click.prevent="open = !open">
-              {{ link.title }}
-              <span x-show="link.links.length > 0">▼</span>
-            </a>
-            <ul x-show="open" @click.away="open = false" x-transition>
-              {% for childlink in link.links %}
-                <li>
-                  <a href="{{ childlink.url }}">
-                    {{ childlink.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
-        {% endfor %}
-      </ul>
-      <ul class="account-links">
-        {% if shop.customer_accounts_enabled %}
-          {% if customer %}
-            <li>
-              <a href="/account">{{ customer.first_name | default: 'Account' }}</a>
-            </li>
-            <li>
-              <a href="/account/logout">Log out</a>
-            </li>
-          {% else %}
-            <li><a href="/account/login">Log in</a></li>
-            <li>
-              <a href="/account/register">Create account</a>
-            </li>
-          {% endif %}
-        {% endif %}
-      </ul>
-    </nav>
   </header>
 
-  <div class="desktop-dropdown-container" x-show="open">
-    <nav class="desktop-dropdown">
-      <ul>
-        {% for link in linklists[section.settings.menu].links %}
-          <li>
-            <a href="{{ link.url }}">
-              {{ link.title }}
-            </a>
-            <ul>
-              {% for childlink in link.links %}
-                <li>
-                  <a href="{{ childlink.url }}">
-                    {{ childlink.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
+  <div class="mobile-menu-toggle">
+    <button @click="openMobileMenu = !openMobileMenu" class="menu-button">Menu</button>
   </div>
+
+  <nav class="mobile-menu" x-show="openMobileMenu" @click.away="openMobileMenu = false" x-transition>
+    <ul>
+      {% for link in linklists[section.settings.menu].links %}
+        <li x-data="{ open: false }">
+          <a href="{{ link.url }}" @click.prevent="open = !open">
+            {{ link.title }}
+            <span x-show="link.links.length > 0">▼</span>
+          </a>
+          <ul x-show="open" @click.away="open = false" x-transition>
+            {% for childlink in link.links %}
+              <li>
+                <a href="{{ childlink.url }}">
+                  {{ childlink.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
 </section>
 
 <style>
@@ -200,56 +160,30 @@
     color: #007bff; /* Change color on hover */
   }
 
-  .desktop-nav ul {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  .desktop-nav ul,
+  .mobile-menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
 
-  .desktop-nav li {
+  .desktop-nav li,
+  .mobile-menu li {
     position: relative;
   }
 
-  .desktop-nav a {
+  .desktop-nav a,
+  .mobile-menu a {
     text-decoration: none;
     padding: 10px 15px;
     display: block;
     color: #333;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s;
   }
 
-  .desktop-nav a:hover {
+  .desktop-nav a:hover,
+  .mobile-menu a:hover {
     background-color: #f0f0f0; /* Light gray on hover */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
-  }
-
-  .desktop-dropdown {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px 20px;
-    width: 200px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    flex-direction: column; /* Ensure dropdown items are in a column */
-  }
-
-  .desktop-dropdown-container {
-    position: relative;
-    padding: 10px 20px;
-    width: 100px;
-  }
-
-  .desktop-dropdown-container:hover .desktop-dropdown {
-    display: flex; /* Show dropdown on hover */
-    flex-drection: column;
-    justify-content: space-evenly;
-    align-items: start;
   }
 
   .mobile-menu {
@@ -348,7 +282,7 @@
     "@context": "http://schema.org",
     "@type": "Organization",
     "name": "{{ shop.name }}",
-    {% if section.settings.logo %}
+   {% if section.settings.logo %}
       {% assign image_size = section.settings.logo.width | append:'x' %}
       "logo": "https:{{ section.settings.logo | img_url: image_size }}",
     {% endif %}
