@@ -3,3 +3,23 @@
 <time datetime="{{ article.published_at | date: "%d-%m-%y" }}">{{ article.published_at | date: '%d-%m-%y' }}</time>
 <img src="{{ article.image | image_url: 'large' }}" alt="{{ article.img.alt }}" height="100" width="100">
 <div>{{ article.content }}</div>
+
+{% schema %}
+{
+  "name": "article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable-author",
+      "label": "Display Author Name",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable-published-date",
+      "label": "Display Published Date",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
