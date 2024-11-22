@@ -11,6 +11,34 @@
   "sections": {
     "article": {
       "type": "article",
+      "blocks": {
+        "title": {
+          "type": "article-title",
+          "settings": {}
+        },
+        "author": {
+          "type": "article-author",
+          "settings": {}
+        },
+        "published-date": {
+          "type": "article-published-date",
+          "settings": {}
+        },
+        "thumbnail": {
+          "type": "thumbnail",
+          "settings": {}
+        },
+        "content": {
+          "type": "article-content",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "author",
+        "published-date",
+        "thumbnail"
+      ],
       "settings": {}
     }
   },
