@@ -38,6 +38,10 @@
   {% endfor %}
 </article>
 
+{% if blog.comments_enabled? %}
+  <h1>Hello World</h1>
+{% endif %}
+
 <style>
   .article-container {
     display: flex;
