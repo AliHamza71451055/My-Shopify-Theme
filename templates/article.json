@@ -16,6 +16,10 @@
           "type": "article-title",
           "settings": {}
         },
+        "thumbnail": {
+          "type": "thumbnail",
+          "settings": {}
+        },
         "author": {
           "type": "article-author",
           "settings": {}
@@ -24,22 +28,22 @@
           "type": "article-published-date",
           "settings": {}
         },
-        "thumbnail": {
-          "type": "thumbnail",
-          "settings": {}
-        },
-        "content": {
+        "article_content_zYdbXG": {
           "type": "article-content",
           "settings": {}
         }
       },
       "block_order": [
         "title",
+        "thumbnail",
         "author",
         "published-date",
-        "thumbnail"
+        "article_content_zYdbXG"
       ],
-      "settings": {}
+      "settings": {
+        "enable-author": true,
+        "enable-published-date": true
+      }
     }
   },
   "order": [
