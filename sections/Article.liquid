@@ -2,6 +2,7 @@
   {% for block in section.blocks %}
     {% case block.type %}
       {% when 'article-title' %}
+        <a href="{{ blog.url }}">{{ blog.title }}</a>
         <h1 class="article-title">{{ article.title }}</h1>
       {% when 'article-author' %}
         {% if section.settings['enable-author'] %}
