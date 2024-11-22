@@ -20,6 +20,12 @@
           "type": "thumbnail",
           "settings": {}
         },
+        "article_summary_XmGLpH": {
+          "type": "article-summary",
+          "settings": {
+            "summary_text": "Here is the Summary of this article."
+          }
+        },
         "author": {
           "type": "article-author",
           "settings": {}
@@ -28,34 +34,18 @@
           "type": "article-published-date",
           "settings": {}
         },
-        "summary": {
-          "type": "article-summary",
-          "disabled": true,
-          "settings": {
-            "summary_text": "This is a brief summary of the article that provides an overview of the content."
-          }
-        },
         "article_content_zYdbXG": {
           "type": "article-content",
           "settings": {}
-        },
-        "call_to_action": {
-          "type": "call-to-action",
-          "disabled": true,
-          "settings": {
-            "cta_text": "Read More",
-            "cta_link": "https://example.com/more-info"
-          }
         }
       },
       "block_order": [
         "title",
         "thumbnail",
+        "article_summary_XmGLpH",
         "author",
         "published-date",
-        "summary",
-        "article_content_zYdbXG",
-        "call_to_action"
+        "article_content_zYdbXG"
       ],
       "settings": {
         "enable-author": true,
