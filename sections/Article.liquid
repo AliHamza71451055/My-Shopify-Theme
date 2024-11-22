@@ -1,33 +1,35 @@
-{% for block in section.blocks %}
-  {% case block.type %}
-    {% when 'article-title' %}
-      <h1 class="article-title">{{ article.title }}</h1>
-    {% when 'article-author' %}
-      {% if section.settings['enable-author'] %}
-        <small class="article-author">{{ article.author }}</small>
-      {% endif %}
-    {% when 'article-published-date' %}
-      {% if section.settings['enable-published-date'] %}
-        <time class="article-published-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-          {{ article.published_at | date: '%d-%m-%Y' }}
-        </time>
-      {% endif %}
-    {% when 'thumbnail' %}
-      {% if article.image %}
-        <img
-          class="article-thumbnail"
-          src="{{ article.image | image_url: 'large' }}"
-          alt="{{ article.image.alt | escape }}"
-          height="100"
-          width="100"
-        >
-      {% endif %}
-    {% when 'article-content' %}
-      <div class="article-content">{{ article.content }}</div>
-    {% else %}
-      <!-- Optional: Handle unexpected block types -->
-  {% endcase %}
-{% endfor %}
+<article>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'article-title' %}
+        <h1 class="article-title">{{ article.title }}</h1>
+      {% when 'article-author' %}
+        {% if section.settings['enable-author'] %}
+          <small class="article-author">{{ article.author }}</small>
+        {% endif %}
+      {% when 'article-published-date' %}
+        {% if section.settings['enable-published-date'] %}
+          <time class="article-published-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+            {{ article.published_at | date: '%d-%m-%Y' }}
+          </time>
+        {% endif %}
+      {% when 'thumbnail' %}
+        {% if article.image %}
+          <img
+            class="article-thumbnail"
+            src="{{ article.image | image_url: 'large' }}"
+            alt="{{ article.image.alt | escape }}"
+            height="100"
+            width="100"
+          >
+        {% endif %}
+      {% when 'article-content' %}
+        <div class="article-content">{{ article.content }}</div>
+      {% else %}
+        <!-- Optional: Handle unexpected block types -->
+    {% endcase %}
+  {% endfor %}
+</article>
 
 <style>
   .article-title {
