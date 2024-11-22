@@ -57,7 +57,7 @@
 
 <div class="comments-form" id="comments_form">
   <h3 class="form-title">Add a Comment</h3>
-  {% form 'new_comment' %}
+  {% form 'new_comment', article %}
     <label for="comment-author">Name</label>
     <input type="text" name="comment[author]" id="comment-author" placeholder="Your Name" required>
     <label for="comment-email">Email</label>
