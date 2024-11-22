@@ -1,15 +1,15 @@
-<article>
+<article class="article-container">
   {% for block in section.blocks %}
     {% case block.type %}
       {% when 'article-title' %}
-        <a href="{{ blog.url }}">{{ blog.title }}</a>
+        <a href="{{ blog.url }}" class="blog-title">{{ blog.title }}</a>
         <h1 class="article-title">{{ article.title }}</h1>
       {% when 'article-author' %}
-        {% if section.settings['enable-author'] %}
+        {% if section.settings.enable-author %}
           <small class="article-author">{{ article.author }}</small>
         {% endif %}
       {% when 'article-published-date' %}
-        {% if section.settings['enable-published-date'] %}
+        {% if section.settings.enable-published-date %}
           <time class="article-published-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
             {{ article.published_at | date: '%d-%m-%Y' }}
           </time>
@@ -33,101 +33,88 @@
 </article>
 
 <style>
-  article {
+  .article-container {
     display: flex;
     flex-direction: column;
-    justify content: space-evenly;
     align-items: center;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px; /* Limit the width for better readability */
+    border: 1px solid #eaeaea;
+    border-radius: 12px; /* Rounded corners */
+    background-color: #ffffff; /* White background for contrast */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .article-container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+  }
+
+  .blog-title {
+    font-size: 1.2em;
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+    margin-bottom: 10px;
+  }
+
+  .blog-title:hover {
+    text-decoration: underline; /* Underline on hover */
   }
 
   .article-title {
-    font-size: 25px;
-    margin: 5px;
+    font-size: 2.5em; /* Larger title */
+    margin: 10px 0;
     color: #333;
+    text-align: center; /* Centered title */
+    transition: color 0.3s; /* Smooth color transition */
   }
 
   .article-title:hover {
-    font-weight: bold;
-    color: red;
+    color: #e63946; /* Change color on hover */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
   }
 
   .article-author {
-    font-size: 1em;
+    font-size: 1.1em;
     color: #555;
     margin-bottom: 0.5em;
     display: block;
+    text-align: center; /* Centered author name */
   }
 
   .article-published-date {
     font-size: 0.9em;
     color: #777;
     margin-bottom: 1em;
+    text-align: center; /* Centered published date */
   }
 
   .article-thumbnail {
-    border-radius: 8px;
+    border-radius: 12px; /* Rounded corners for the image */
     margin-bottom: 1em;
     display: block;
     max-width: 100%; /* Responsive */
     height: auto; /* Maintain aspect ratio */
+    transition: transform 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .article-thumbnail:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
   }
 
   .article-content {
-    font-size: 1.1em;
-    line-height: 1.6;
+    font-size: 1.2em;
+    line-height: 1.8; /* Increased line height for readability */
     color: #444;
     margin-top: 1em;
+    text-align: left; /* Left-aligned content for readability */
   }
 
   /* Additional styling for better layout */
   .article-content p {
     margin-bottom: 1em;
-  }
-</style>
-
-{% schema %}
-{
-  "name": "article",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "enable-author",
-      "label": "Display Author Name",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable-published-date",
-      "label": "Display Published Date",
-      "default": true
-    }
-  ],
-  "blocks": [
-    {
-      "type": "article-title",
-      "name": "Title",
-      "limit": 1
-    },
-    {
-      "type": "article-author",
-      "name": "Author",
-      "limit": 1
-    },
-    {
-      "type": "article-published-date",
-      "name": "Published Date",
-      "limit": 1
-    },
-    {
-      "type": "thumbnail",
-      "name": "Featured Image",
-      "limit": 1
-    },
-    {
-      "type": "article-content",
-      "name": "Content",
-      "limit": 1
-    }
-  ]
-}
-{% endschema %}
+    padding: 10px; /* Padding for paragraphs */
+    background-color: #f9f9f9; /* Light background for paragraphs */
+   
