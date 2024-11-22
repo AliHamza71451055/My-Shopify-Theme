@@ -58,10 +58,12 @@
 <div class="comments-form" id="comments_form">
   <h3 class="form-title">Add a Comment</h3>
   {% form 'new_comment', article %}
-    <label for="comment-author">Name</label>
-    <input type="text" name="comment[author]" id="comment-author" placeholder="Your Name" required>
-    <label for="comment-email">Email</label>
-    <input type="email" name="comment[email]" id="comment-email" placeholder="Your Email" required>
+    <div class="comment-name-and-email">
+      <label for="comment-author">Name</label>
+      <input type="text" name="comment[author]" id="comment-author" placeholder="Your Name" required>
+      <label for="comment-email">Email</label>
+      <input type="email" name="comment[email]" id="comment-email" placeholder="Your Email" required>
+    </div>
     <label for="comment-body">Comment</label>
     <textarea name="comment[body]" id="comment-body" placeholder="Your Comment" required></textarea>
     <input type="submit" value="Post Comment" class="submit-button">
@@ -230,7 +232,23 @@
     font-weight: bold;
   }
 
-  .comments-form input[type="text"],
+  .comment-name-and-email {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .comment-name-and-email .comments-form input[type="text"],
+  .comment-name-and-email .comments-form input[type="email"] {
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+
+
   .comments-form input[type="email"],
   .comments-form textarea {
     width: 100%;
