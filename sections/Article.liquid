@@ -44,6 +44,17 @@
     There are no comments in this article.
   {% endif %}
 </div>
+<div class="comments-form">
+  {% form 'new_comment' %}
+    <label for="comment-author">Name</label>
+    <input type="text" name="comment[author]" id="comment-author" placeholder="Your Name" required>
+    <label for="comment-email">Email</label>
+    <input type="Email" name="comment[email]" id="comment-email" placeholder="Your Email" required>
+    <label for="comment-body">Name</label>
+    <textarea type="text" name="comment[body]" id="comment-body" placeholder="Comment" required></textarea>
+    <input type="submit" value="Post Comment">
+  {% endform %}
+</div>
 
 <style>
   .article-container {
