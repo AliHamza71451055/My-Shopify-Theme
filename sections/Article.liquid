@@ -39,101 +39,97 @@
 </article>
 
 <div class="comments-section">
+  <h2 class="comments-title">Comments</h2>
   {% if article.comments_count > 0 %}
+    <ul class="comments-list">
+      {% for comment in article.comments %}
+        <li class="comment-item">
+          <div class="comment-author">{{ comment.author }}</div>
+          <div class="comment-body">{{ comment.body }}</div>
+          <div class="comment-date">{{ comment.created_at | date: '%d-%m-%Y' }}</div>
+        </li>
+      {% endfor %}
+    </ul>
   {% else %}
-    There are no comments in this article.
+    <p class="no-comments">There are no comments on this article.</p>
   {% endif %}
 </div>
-<div class="comments-form">
+
+<div class="comments-form" id="comments_form">
+  <h3 class="form-title">Add a Comment</h3>
   {% form 'new_comment' %}
     <label for="comment-author">Name</label>
     <input type="text" name="comment[author]" id="comment-author" placeholder="Your Name" required>
     <label for="comment-email">Email</label>
-    <input type="Email" name="comment[email]" id="comment-email" placeholder="Your Email" required>
-    <label for="comment-body">Name</label>
-    <textarea type="text" name="comment[body]" id="comment-body" placeholder="Comment" required></textarea>
-    <input type="submit" value="Post Comment">
+    <input type="email" name="comment[email]" id="comment-email" placeholder="Your Email" required>
+    <label for="comment-body">Comment</label>
+    <textarea name="comment[body]" id="comment-body" placeholder="Your Comment" required></textarea>
+    <input type="submit" value="Post Comment" class="submit-button">
   {% endform %}
 </div>
 
 <style>
+  /* Article Styles */
   .article-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     margin: 20px auto;
-    max-width: 800px; /* Limit the width for better readability */
+    max-width: 800px;
     border: 1px solid #eaeaea;
-    border-radius: 12px; /* Rounded corners */
-    background-color: #ffffff; /* White background for contrast */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
-    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
   }
 
   .article-container:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
 
   .blog-title {
     font-size: 20px;
-    color: #007bff; /* Link color */
-    text-decoration: none; /* Remove underline */
+    color: #007bff;
+    text-decoration: none;
     margin-bottom: 10px;
-  }
-
-  .blog-title:hover {
-    text-decoration: underline; /* Underline on hover */
   }
 
   .article-title {
-    font-size: 60px; /* Larger title */
+    font-size: 60px;
     margin: 10px 0;
     color: #333;
-    text-align: center; /* Centered title */
-    transition: color 0.3s; /* Smooth color transition */
+    text-align: center;
+    transition: color 0.3s;
   }
 
-  .article-title:hover {
-    color: #e63946; /* Change color on hover */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
-  }
-
-  .article-author {
-    font-size: 22px;
-    color: #555;
-    margin-bottom: 10px;
-    display: block;
-    text-align: center; /* Centered author name */
-  }
-
-  .article-published-date {
+  .article-author, .article-published-date {
     font-size: 18px;
-    color: #777;
-    margin-bottom: 10px;
-    text-align: center; /* Centered published date */
+    color: #555;
+    margin-bottom:  10px;
+    text-align: center;
   }
 
   .article-thumbnail {
-    border-radius: 12px; /* Rounded corners for the image */
+    border-radius: 12px;
     margin-bottom: 10px;
     display: block;
-    max-width: 100%; /* Responsive */
-    height: auto; /* Maintain aspect ratio */
-    transition: transform 0.3s; /* Smooth transition for hover effects */
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s;
   }
 
   .article-thumbnail:hover {
-    transform: scale(1.05); /* Slight zoom effect on hover */
+    transform: scale(1.05);
   }
 
   .article-content {
     font-size: 1.2em;
-    line-height: 1.8; /* Increased line height for readability */
+    line-height: 1.8;
     color: #444;
     margin-top: 10px;
-    text-align: left; /* Left-aligned content for readability */
+    text-align: left;
   }
 
   .article-summary {
@@ -141,43 +137,120 @@
     color: #666;
     margin: 1em 0;
     padding: 10px;
-    background-color: #f0f0f0; /* Light background for summary */
-    border-left: 4px solid #007bff; /* Highlight left border */
-  }
-
-  .article-tags {
-    margin: 10px 0;
-    text-align: center; /* Centered tags */
-  }
-
-  .tag {
-    display: inline-block;
-    background-color: #e0e0e0; /* Tag background */
-    color: #333;
-    padding: 5px 10px;
-    border-radius: 20px; /* Rounded tags */
-    margin: 0 5px; /* Spacing between tags */
-    font-size: 0.9em;
+    background-color: #f0f0f0;
+    border-left: 4px solid #007bff;
   }
 
   .call-to-action {
     margin: 20px 0;
-    text-align: center; /* Centered CTA */
+    text-align: center;
   }
 
   .cta-button {
-    background-color: #007bff; /* CTA button color */
-    color: white; /* Text color */
+    background-color: #007bff;
+    color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* Remove underline */
+    border-radius: 5px;
+    text-decoration: none;
     font-size: 25px;
-    transition: background-color 0.3s; /* Smooth transition for hover */
+    transition: background-color 0.3s;
   }
 
   .cta-button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3;
+  }
+
+  /* Comments Section Styles */
+  .comments-section {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #eaeaea;
+    background-color: #f9f9f9;
+  }
+
+  .comments-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .comments-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .comment-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+
+  .comment-author {
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  .comment-body {
+    margin: 5px 0;
+    color: #444;
+  }
+
+  .comment-date {
+    font-size: 12px;
+    color: #777;
+  }
+
+  .no-comments {
+    color: #999;
+    font-style: italic;
+  }
+
+  /* Comment Form Styles */
+  .comments-form {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+
+  .form-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .comments-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .comments-form input[type="text"],
+  .comments-form input[type="email"],
+  .comments-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .comments-form .submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .comments-form .submit-button:hover {
+    background-color: #0056b3;
   }
 </style>
 
@@ -221,7 +294,7 @@
     },
     {
       "type": "article-content",
-      "name": "Content",
+ "name": "Content",
       "limit": 1
     },
     {
