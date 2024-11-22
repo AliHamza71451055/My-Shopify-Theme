@@ -12,8 +12,9 @@
           {{- article.published_at | date: '%d-%m-%y' -}}
         </time>
       {% endif %}
-    {% when 'article.thumbnail' %}
+    {% when 'thumbnail' %}
       <img src="{{ article.image | image_url: 'large' }}" alt="{{ article.img.alt }}" height="100" width="100">
+    {% when 'article-content' %}
       <div>{{ article.content }}</div>
     {% else %}
 
