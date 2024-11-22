@@ -1,18 +1,18 @@
 {% for blocks in section.blocks %}
   {% case block.type %}
-    {% when article['article-title'] %}
+    {% when 'article-title' %}
       <h1>{{ article.title }}</h1>
-    {% when article['article-author'] %}
+    {% when 'article-author' %}
       {% if section.settings['enable-author'] %}
         <small>{{ article.author }}</small>
       {% endif %}
-    {% when article['article-published-date'] %}
+    {% when 'article-published-date' %}
       {% if section.settings['enable-published-date'] %}
         <time datetime="{{ article.published_at | date: "%d-%m-%y" }}">
           {{- article.published_at | date: '%d-%m-%y' -}}
         </time>
       {% endif %}
-    {% when article['article.thumbnail'] %}
+    {% when 'article.thumbnail' %}
       <img src="{{ article.image | image_url: 'large' }}" alt="{{ article.img.alt }}" height="100" width="100">
       <div>{{ article.content }}</div>
     {% else %}
