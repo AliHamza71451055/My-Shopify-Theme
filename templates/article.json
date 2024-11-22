@@ -31,6 +31,25 @@
         "article_content_zYdbXG": {
           "type": "article-content",
           "settings": {}
+        },
+        "summary": {
+          "type": "article-summary",
+          "settings": {
+            "summary_text": "This is a brief summary of the article that provides an overview of the content."
+          }
+        },
+        "tags": {
+          "type": "article-tags",
+          "settings": {
+            "tags": "tag1, tag2, tag3"
+          }
+        },
+        "call_to_action": {
+          "type": "call-to-action",
+          "settings": {
+            "cta_text": "Read More",
+            "cta_link": "https://example.com/more-info"
+          }
         }
       },
       "block_order": [
@@ -38,7 +57,10 @@
         "thumbnail",
         "author",
         "published-date",
-        "article_content_zYdbXG"
+        "summary",
+        "tags",
+        "article_content_zYdbXG",
+        "call_to_action"
       ],
       "settings": {
         "enable-author": true,
