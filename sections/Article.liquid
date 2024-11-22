@@ -5,11 +5,11 @@
         <a href="{{ blog.url }}" class="blog-title">{{ blog.title }}</a>
         <h1 class="article-title">{{ article.title }}</h1>
       {% when 'article-author' %}
-        {% if section.settings.enable-author %}
+        {% if section.settings['enable-author'] %}
           <small class="article-author">{{ article.author }}</small>
         {% endif %}
       {% when 'article-published-date' %}
-        {% if section.settings.enable-published-date %}
+        {% if section.settings['enable-published-date'] %}
           <time class="article-published-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
             {{ article.published_at | date: '%d-%m-%Y' }}
           </time>
@@ -26,6 +26,18 @@
         {% endif %}
       {% when 'article-content' %}
         <div class="article-content">{{ article.content }}</div>
+      {% when 'article-summary' %}
+        <div class="article-summary">{{ block.settings.summary_text }}</div>
+      {% when 'article-tags' %}
+        <div class="article-tags">
+          {% for tag in block.settings.tags %}
+            <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% when 'call-to-action' %}
+        <div class="call-to-action">
+          <a href="{{ block.settings.cta_link }}" class="cta-button">{{ block.settings.cta_text }}</a>
+        </div>
       {% else %}
         <!-- Optional: Handle unexpected block types -->
     {% endcase %}
@@ -112,12 +124,50 @@
     text-align: left; /* Left-aligned content for readability */
   }
 
-  /* Additional styling for better layout */
-  .article-content p {
-    margin-bottom: 1em;
-    padding: 10px; /* Padding for paragraphs */
-    background-color: #f9f9f9; /* Light background for paragraphs */
-   
+  .article-summary {
+    font-size: 1.1em;
+    color: #666;
+    margin: 1em 0;
+    padding: 10px;
+    background-color: #f0f0f0; /* Light background for summary */
+    border-left: 4px solid #007bff; /* Highlight left border */
+  }
+
+  .article-tags {
+    margin: 1em 0;
+    text-align: center; /* Centered tags */
+  }
+
+  .tag {
+    display: inline-block;
+    background-color: #e0e0e0; /* Tag background */
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 20px; /* Rounded tags */
+    margin: 0 5px; /* Spacing between tags */
+    font-size: 0.9em;
+  }
+
+  .call-to-action {
+    margin: 2em 0;
+    text-align: center; /* Centered CTA */
+  }
+
+  .cta-button {
+    background-color: #007bff; /* CTA button color */
+    color: white; /* Text color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    font-size: 1.1em;
+    transition: background-color 0.3s; /* Smooth transition for hover */
+  }
+
+  .cta-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+  }
+</style>
 
 {% schema %}
 {
@@ -161,6 +211,47 @@
       "type": "article-content",
       "name": "Content",
       "limit": 1
+    },
+    {
+      "type": "article-summary",
+      "name": "Summary",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "summary_text",
+          "label": "Summary Text"
+        }
+      ]
+    },
+    {
+      "type": "article-tags",
+      "name": "Tags",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "tags",
+          "label": "Tags (comma separated)"
+        }
+      ]
+    },
+    {
+      "type": "call-to-action",
+      "name": "Call to Action",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA Button Text"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA Button Link"
+        }
+      ]
     }
   ]
 }
