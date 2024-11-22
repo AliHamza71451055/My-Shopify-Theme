@@ -28,12 +28,6 @@
         <div class="article-content">{{ article.content }}</div>
       {% when 'article-summary' %}
         <div class="article-summary">{{ block.settings.summary_text }}</div>
-      {% when 'article-tags' %}
-        <div class="article-tags">
-          {% for tag in block.settings.tags %}
-            <span class="tag">{{ tag }}</span>
-          {% endfor %}
-        </div>
       {% when 'call-to-action' %}
         <div class="call-to-action">
           <a href="{{ block.settings.cta_link }}" class="cta-button">{{ block.settings.cta_text }}</a>
@@ -221,18 +215,6 @@
           "type": "textarea",
           "id": "summary_text",
           "label": "Summary Text"
-        }
-      ]
-    },
-    {
-      "type": "article-tags",
-      "name": "Tags",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "tags",
-          "label": "Tags (comma separated)"
         }
       ]
     },
